@@ -2,7 +2,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from src.log import logger
+from src.logger import logger
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 

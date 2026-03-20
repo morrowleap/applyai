@@ -4,7 +4,7 @@ import re
 from fastapi import APIRouter, HTTPException
 
 from src.claude import run_claude
-from src.log import logger
+from src.logger import logger
 from src.models import ScoreRequest
 from src import state
 

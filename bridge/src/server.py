@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src import routes, state
 from src.claude import run_claude
 from src.loader import RESOURCES_DIR, load_resources
-from src.log import logger
+from src.logger import logger
 
 SESSION_DIR = Path.home() / ".claude" / "projects" / str(Path.cwd()).replace("/", "-")
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.log import logger
+from src.logger import logger
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 RESOURCES_DIR = BASE_DIR / "resources"
