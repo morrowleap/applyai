@@ -4,7 +4,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src import routes
+from src import routes, state
 from src.claude import run_claude
 from src.loader import RESOURCES_DIR, load_resources
 from src.log import logger
@@ -35,17 +35,17 @@ Read and remember them — you will use this information to fill out job applica
 
 Acknowledge that you have read these materials and give a brief summary of who I am and my key skills."""
 
-    result, routes.session.session_id = run_claude(init_prompt)
-    logger.info(f"Session ready: {routes.session.session_id}")
+    result, state.session_id = run_claude(init_prompt)
+    logger.info(f"Session ready: {state.session_id}")
     logger.debug(f"Claude init response: {result[:300]}")
     yield
     logger.info("Shutting down.")
-    session_file = SESSION_DIR / f"{routes.session.session_id}.jsonl"
+    session_file = SESSION_DIR / f"{state.session_id}.jsonl"
     if session_file.exists():
         session_file.unlink()
-        logger.info(f"Session {routes.session.session_id} cleaned up at {session_file}")
+        logger.info(f"Session {state.session_id} cleaned up at {session_file}")
     else:
-        logger.warning(f"Session file not found for {routes.session.session_id} at {session_file}")
+        logger.warning(f"Session file not found for {state.session_id} at {session_file}")
 
 
 app = FastAPI(lifespan=lifespan)

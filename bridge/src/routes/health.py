@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from src.routes import session
+from src import state
 
 router = APIRouter()
 
 
 @router.get("/health")
 def health():
-    return {"status": "ok", "session_id": session.session_id}
+    return {"status": "ok", "session_id": state.session_id}

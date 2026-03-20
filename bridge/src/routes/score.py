@@ -6,14 +6,14 @@ from fastapi import APIRouter, HTTPException
 from src.claude import run_claude
 from src.log import logger
 from src.models import ScoreRequest
-from src.routes import session
+from src import state
 
 router = APIRouter()
 
 
 @router.post("/score")
 def score(body: ScoreRequest):
-    if not session.session_id:
+    if not state.session_id:
         raise HTTPException(503, "Session not initialized")
 
     prompt = f"""Score this job posting for fit with my profile.
@@ -32,8 +32,8 @@ Return ONLY a JSON object with these fields:
 Output ONLY the JSON object, no explanation."""
 
     try:
-        logger.info(f"Scoring job: {body.title} at {body.company} (session {session.session_id})...")
-        response, _ = run_claude(prompt, session_id=session.session_id)
+        logger.info(f"Scoring job: {body.title} at {body.company} (session {state.session_id})...")
+        response, _ = run_claude(prompt, session_id=state.session_id)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
