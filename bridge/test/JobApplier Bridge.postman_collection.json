@@ -1,0 +1,158 @@
+{
+  "info": {
+    "_postman_id": "191e8b0c-7479-444b-91fa-1dcc633fd402",
+    "name": "JobApplier Bridge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51636950"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fill Form - Text fields",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"jobContext\": \"Backend Engineer at Stripe, London\",\n  \"fields\": [\n    { \"index\": 0, \"label\": \"First Name\", \"type\": \"text\", \"options\": [] },\n    { \"index\": 1, \"label\": \"Last Name\", \"type\": \"text\", \"options\": [] },\n    { \"index\": 2, \"label\": \"Email\", \"type\": \"email\", \"options\": [] },\n    { \"index\": 3, \"label\": \"Phone\", \"type\": \"tel\", \"options\": [] },\n    { \"index\": 4, \"label\": \"LinkedIn URL\", \"type\": \"text\", \"options\": [] },\n    { \"index\": 5, \"label\": \"Years of Experience\", \"type\": \"text\", \"options\": [] }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/fill",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "fill"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fill Form - Dropdowns",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"jobContext\": \"Java Developer at Macquarie, Sydney\",\n  \"fields\": [\n    { \"index\": 0, \"label\": \"Are you legally authorized to work in Australia?\", \"type\": \"select\", \"options\": [\"Yes\", \"No\"] },\n    { \"index\": 1, \"label\": \"Do you require visa sponsorship?\", \"type\": \"select\", \"options\": [\"Yes\", \"No\"] },\n    { \"index\": 2, \"label\": \"Highest Education Level\", \"type\": \"select\", \"options\": [\"High School\\\"Bachelor's\\\"\", \"Master's\", \"PhD\"] },\n    { \"index\": 3, \"label\": \"Employment Type\", \"type\": \"select\", \"options\": [\"Full-time\", \"Part-time\", \"Contract\"] }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/fill",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "fill"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fill Form - No job context",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fields\": [\n    { \"index\": 0, \"label\": \"Full Name\", \"type\": \"text\", \"options\": [] },\n    { \"index\": 1, \"label\": \"Email\", \"type\": \"email\", \"options\": [] },\n    { \"index\": 2, \"label\": \"Cover Letter\", \"type\": \"textarea\", \"options\": [] }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/fill",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "fill"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fill Form - Missing fields (400 error)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fields\": []\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/fill",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "fill"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
