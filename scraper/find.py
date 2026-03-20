@@ -6,8 +6,6 @@ import time
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright, TimeoutError as PWTimeoutError
-from rich.console import Console
-from rich.table import Table
 
 from scorer import score_job
 
@@ -126,47 +124,8 @@ def main():
         scored = score_job(job["title"], job["company"], job["description"])
         results.append({**job, **scored})
 
-    results.sort(key=lambda x: x.get("score", 0), reverse=True)
-
-    # Print table
-    table = Table(title="Job Matches (ranked by score)", show_lines=True)
-    table.add_column("#", style="dim", width=3)
-    table.add_column("Score", style="bold green", width=6)
-    table.add_column("Title", style="bold", max_width=30)
-    table.add_column("Company", max_width=20)
-    table.add_column("Location", max_width=15)
-    table.add_column("Reason", max_width=40)
-    table.add_column("URL", max_width=50)
-
-    for i, r in enumerate(results, 1):
-        score_val = r.get("score", 0)
-        color = "green" if score_val >= 7 else ("yellow" if score_val >= 4 else "red")
-        table.add_row(
-            str(i),
-            f"[{color}]{score_val}[/{color}]",
-            r["title"],
-            r["company"],
-            r["location"],
-            r.get("reason", ""),
-            r["url"][:60] if r["url"] else "",
-        )
-
-    console.print(table)
-
-    # Save to jobs.json
-    out_path = Path(__file__).parent / "jobs.json"
-    with open(out_path, "w") as f:
-        json.dump(results, f, indent=2)
-    console.print(f"\n[green]Saved {len(results)} jobs to {out_path}[/green]")
-    console.print("\n[bold]Top pick URL:[/bold]")
-    if results:
-        console.print(f"  {results[0]['url']}")
-        console.print(f"\nTo apply: [cyan]cd ../applier && ./run.sh \"{results[0]['url']}\"[/cyan]")
+    console.print(results)
 
 
 if __name__ == "__main__":
     main()
-
-
-claude --resume 580b5384-f92e-4969-9dcd-6312bcc14039 
-claude --resume 580b5384-f92e-4969-9dcd-6312bcc14039
