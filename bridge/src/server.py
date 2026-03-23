@@ -29,7 +29,8 @@ async def lifespan(app: FastAPI):
         raise RuntimeError(f"No readable files found in {RESOURCES_DIR}")
 
     init_prompt = f"""You are a job application assistant. Below are my job application materials.
-Read and remember them — you will use this information to fill out job application forms in follow-up requests.
+Read and remember them — you will use this information to evaluate job postings in follow-up requests.
+For each job I send you, you will score how well it matches my profile, identify matching skills, and flag any gaps.
 
 {resources}
 
