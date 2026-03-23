@@ -37,7 +37,7 @@ def main():
 
             page.goto(LINKEDIN_JOBS_URL, wait_until="domcontentloaded", timeout=30000)
             print("LinkedIn jobs opened. Press Ctrl+C to exit.")
-            while True:
+            while not page.is_closed():
                 time.sleep(1)
         except (KeyboardInterrupt, PlaywrightError):
             pass
