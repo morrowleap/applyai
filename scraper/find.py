@@ -19,8 +19,11 @@ def main():
         page = context.new_page()
         page.goto(LINKEDIN_JOBS_URL, wait_until="domcontentloaded", timeout=30000)
         print("LinkedIn jobs opened. Press Ctrl+C to exit.")
-        while True:
-            time.sleep(1)
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            pass
 
 
 if __name__ == "__main__":
