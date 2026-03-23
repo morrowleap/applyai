@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
+import os
 import time
 
-from playwright.sync_api import sync_playwright
+from dotenv import load_dotenv
+from playwright.sync_api import sync_playwright, Error as PlaywrightError
 
+load_dotenv()
+
+LINKEDIN_LOGIN_URL = "https://www.linkedin.com/login"
 LINKEDIN_JOBS_URL = "https://www.linkedin.com/jobs/search/"
 
 
 def main():
+    email = os.environ["LINKEDIN_EMAIL"]
+    password = os.environ["LINKEDIN_PASSWORD"]
+
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         context = browser.new_context(
@@ -17,12 +25,21 @@ def main():
             )
         )
         page = context.new_page()
-        page.goto(LINKEDIN_JOBS_URL, wait_until="domcontentloaded", timeout=30000)
-        print("LinkedIn jobs opened. Press Ctrl+C to exit.")
         try:
+            page.goto(LINKEDIN_LOGIN_URL, wait_until="domcontentloaded", timeout=30000)
+            page.fill("#username", email)
+            page.fill("#password", password)
+            page.click("button[type='submit']")
+            print("Logging in...")
+
+            page.wait_for_url("**/feed/**", timeout=30000)
+            print("Logged in. Opening jobs...")
+
+            page.goto(LINKEDIN_JOBS_URL, wait_until="domcontentloaded", timeout=30000)
+            print("LinkedIn jobs opened. Press Ctrl+C to exit.")
             while True:
                 time.sleep(1)
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, PlaywrightError):
             pass
 
 
