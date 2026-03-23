@@ -19,11 +19,12 @@ def generate_keyword():
     prompt = """Based on my resume (which you already have), generate ONE job search keyword or short phrase (2-5 words) that I should use on LinkedIn or job boards right now.
 
 Requirements:
-- Target the fintech and banking sector specifically (payments, trading, core banking, lending, wealth management, etc.)
-- Must reflect current (2025-2026) hiring demand in financial services
-- Must be specific enough to surface high-quality matches
+- Must be for individual contributor SOFTWARE ENGINEER roles only — NOT manager, lead, director, or VP titles
+- Target the fintech and banking sector (payments, trading, core banking, lending — avoid the word "wealth management" as it surfaces non-engineering roles)
+- Must reflect current (2025-2026) hiring demand in financial services engineering
+- Must be specific enough to surface high-quality engineer matches
 - Must be different from any keyword you have already suggested in this session
-- Should highlight my skills (Java, Spring Boot, microservices, Kafka, distributed systems) in a fintech/banking context
+- Should combine my technical skills (Java, Spring Boot, microservices, Kafka, distributed systems) with a fintech domain
 
 Return ONLY a JSON object:
 {"keyword": "...", "rationale": "one sentence"}

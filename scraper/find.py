@@ -51,10 +51,22 @@ def main():
             print("Logged in. Opening jobs...")
 
             page.goto(jobs_url, wait_until="domcontentloaded", timeout=30000)
-            print("LinkedIn jobs opened. Press Ctrl+C to exit.")
+
+            # Wait for the job description content to fully load
+            page.wait_for_selector("#job-details p", timeout=15000)
+
+            title_el = page.query_selector("h1.t-24.t-bold")
+            about_el = page.query_selector("#job-details")
+
+            title = title_el.inner_text().strip() if title_el else "N/A"
+            about = about_el.inner_text().strip() if about_el else "N/A"
+
+            print(f"\nTitle: {title}\nAbout: {about}")
+
+            print("\nDone. Press Ctrl+C to exit.")
             while True:
                 time.sleep(1)
-        except (KeyboardInterrupt, PlaywrightError):
+        except (KeyboardInterrupt):
             pass
 
 
