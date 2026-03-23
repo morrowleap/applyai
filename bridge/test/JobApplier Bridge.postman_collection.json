@@ -146,6 +146,54 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Score Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Senior Java Backend Engineer\",\n  \"company\": \"Revolut\",\n  \"description\": \"We are looking for a Senior Java Backend Engineer to join our Payments team. You will design and build high-throughput microservices using Java, Spring Boot, and Kafka. Experience with distributed systems, PostgreSQL, and AWS is required.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/score",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "score"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Generate Job Search Keyword",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/keyword",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "keyword"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [

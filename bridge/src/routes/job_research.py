@@ -11,6 +11,39 @@ from src import state
 router = APIRouter()
 
 
+@router.get("/keyword")
+def generate_keyword():
+    if not state.session_id:
+        raise HTTPException(503, "Session not initialized")
+
+    prompt = """Based on my resume (which you already have), generate ONE job search keyword or short phrase (2-5 words) that I should use on LinkedIn or job boards right now.
+
+Requirements:
+- Target the fintech and banking sector specifically (payments, trading, core banking, lending, wealth management, etc.)
+- Must reflect current (2025-2026) hiring demand in financial services
+- Must be specific enough to surface high-quality matches
+- Must be different from any keyword you have already suggested in this session
+- Should highlight my skills (Java, Spring Boot, microservices, Kafka, distributed systems) in a fintech/banking context
+
+Return ONLY a JSON object:
+{"keyword": "...", "rationale": "one sentence"}
+
+Output ONLY the JSON object, no explanation."""
+
+    try:
+        logger.info(f"Generating job search keyword (session {state.session_id})...")
+        response, _ = run_claude(prompt, session_id=state.session_id)
+        logger.debug(f"Claude raw response: {response}")
+        match = re.search(r"\{[\s\S]*\}", response)
+        if not match:
+            raise ValueError("No JSON object in response: " + response[:200])
+        result = json.loads(match.group())
+        return result
+    except Exception as e:
+        logger.error(f"Keyword generation failed: {e}")
+        raise HTTPException(500, str(e))
+
+
 @router.post("/score")
 def score(body: ScoreRequest):
     if not state.session_id:
