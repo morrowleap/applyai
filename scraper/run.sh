@@ -7,4 +7,4 @@ if [ ! -d ".venv" ]; then
   exit 1
 fi
 
-.venv/bin/python find.py "$@"
+.venv/bin/python find.py
