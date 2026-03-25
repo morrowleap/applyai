@@ -52,18 +52,29 @@ def main():
 
             page.goto(jobs_url, wait_until="domcontentloaded", timeout=30000)
 
-            # Wait for the job description content to fully load
-            page.wait_for_selector("#job-details p", timeout=15000)
+            # Wait for job cards to appear in the left panel
+            page.wait_for_selector("li[data-occludable-job-id]", timeout=15000)
+            cards = page.query_selector_all("li[data-occludable-job-id]")
+            print(f"Found {len(cards)} jobs. Scraping...")
 
-            title_el = page.query_selector("h1.t-24.t-bold")
-            about_el = page.query_selector("#job-details")
+            jobs = []
+            for i, card in enumerate(cards):
+                # Click the card to load its detail in the right panel
+                card.click()
 
-            title = title_el.inner_text().strip() if title_el else "N/A"
-            about = about_el.inner_text().strip() if about_el else "N/A"
+                # Wait for the description content to fully render
+                page.wait_for_selector("#job-details p", timeout=10000)
 
-            print(f"\nTitle: {title}\nAbout: {about}")
+                title_el = page.query_selector("h1.t-24.t-bold")
+                about_el = page.query_selector("#job-details")
 
-            print("\nDone. Press Ctrl+C to exit.")
+                title = title_el.inner_text().strip() if title_el else "N/A"
+                about = about_el.inner_text().strip() if about_el else "N/A"
+
+                jobs.append({"title": title, "about": about})
+                print(f"\n[{i + 1}/{len(cards)}] {title}\n{about[:200]}...")
+
+            print(f"\nDone. Scraped {len(jobs)} jobs.")
             while True:
                 time.sleep(1)
         except (KeyboardInterrupt):
