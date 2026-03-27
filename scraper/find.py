@@ -52,27 +52,47 @@ def main():
 
             page.goto(jobs_url, wait_until="domcontentloaded", timeout=30000)
 
-            # Wait for job cards to appear in the left panel
+            # Wait for the list to load
             page.wait_for_selector("li[data-occludable-job-id]", timeout=15000)
-            cards = page.query_selector_all("li[data-occludable-job-id]")
-            print(f"Found {len(cards)} jobs. Scraping...")
+
+            # Scroll the left panel to load more cards (LinkedIn lazy-loads them)
+            for _ in range(5):
+                page.evaluate("""
+                    const list = document.querySelector('.jobs-search-results-list');
+                    if (list) list.scrollTop += 2000;
+                """)
+                time.sleep(1)
+
+            # Collect all job IDs now in DOM (stable across re-renders)
+            job_ids = page.eval_on_selector_all(
+                "li[data-occludable-job-id]",
+                "els => els.map(el => el.getAttribute('data-occludable-job-id'))"
+            )
+            print(f"Found {len(job_ids)} jobs. Scraping...")
 
             jobs = []
-            for i, card in enumerate(cards):
-                # Click the card to load its detail in the right panel
-                card.click()
+            for i, job_id in enumerate(job_ids):
+                try:
+                    # Scroll card into view — forces LinkedIn to re-render it into DOM
+                    card = page.locator(f"li[data-occludable-job-id='{job_id}']")
+                    card.scroll_into_view_if_needed()
+                    time.sleep(0.3)
+                    card.click()
 
-                # Wait for the description content to fully render
-                page.wait_for_selector("#job-details p", timeout=10000)
+                    # Wait for the description content to fully render
+                    page.wait_for_selector("#job-details p", timeout=10000)
 
-                title_el = page.query_selector("h1.t-24.t-bold")
-                about_el = page.query_selector("#job-details")
+                    title_el = page.query_selector("h1.t-24.t-bold")
+                    about_el = page.query_selector("#job-details")
 
-                title = title_el.inner_text().strip() if title_el else "N/A"
-                about = about_el.inner_text().strip() if about_el else "N/A"
+                    title = title_el.inner_text().strip() if title_el else "N/A"
+                    about = about_el.inner_text().strip() if about_el else "N/A"
 
-                jobs.append({"title": title, "about": about})
-                print(f"\n[{i + 1}/{len(cards)}] {title}\n{about[:200]}...")
+                    jobs.append({"title": title, "about": about})
+                    print(f"\n[{i + 1}/{len(job_ids)}] {title}\n{about[:200]}...")
+                except Exception as e:
+                    print(f"\n[{i + 1}/{len(job_ids)}] Skipping job {job_id}: {e}")
+                    continue
 
             print(f"\nDone. Scraped {len(jobs)} jobs.")
             while True:
