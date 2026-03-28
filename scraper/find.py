@@ -78,13 +78,15 @@ def main():
                     """els => els.map(el => ({
                         id: el.getAttribute('data-occludable-job-id'),
                         link: (el.querySelector('a.job-card-container__link') || {}).href || null
-                    }))"""
+                    }))""",
                 )
                 print(f"\n--- Page {page_num} — {len(job_cards)} jobs ---")
 
                 for i, job in enumerate(job_cards):
                     job_id = job["id"]
-                    job_link = job["link"] or f"https://www.linkedin.com/jobs/view/{job_id}/"
+                    job_link = (
+                        job["link"] or f"https://www.linkedin.com/jobs/view/{job_id}/"
+                    )
                     try:
                         # Scroll card into view — forces LinkedIn to re-render it into DOM
                         card = page.locator(f"li[data-occludable-job-id='{job_id}']")
@@ -99,12 +101,18 @@ def main():
                                 page.wait_for_selector(
                                     ".jobs-description__details [aria-busy='true']",
                                     state="hidden",
-                                    timeout=5000
+                                    timeout=5000,
                                 )
                                 break
                             except Exception:
+                                """
+                                TODO: Find the reason for this indefinite about section loading page,
+                                This maybe an error from linkedin side
+                                """
                                 elapsed = int(time.time() - wait_start)
-                                ans = input(f"\n  [{i + 1}/{len(job_cards)}] Loading {job_link} ({elapsed}s) — s + Enter to skip, Enter to keep waiting: ")
+                                ans = input(
+                                    f"\n  [{i + 1}/{len(job_cards)}] Loading {job_link} ({elapsed}s) — s + Enter to skip, Enter to keep waiting: "
+                                )
                                 if ans.strip().lower() == "s":
                                     raise Exception("Skipped by user")
 
@@ -115,9 +123,13 @@ def main():
                         about = about_el.inner_text().strip() if about_el else "N/A"
 
                         jobs.append({"title": title, "about": about, "link": job_link})
-                        print(f"\n[{i + 1}/{len(job_cards)}] {title}\n{job_link}\n{about[:200]}...")
+                        print(
+                            f"\n[{i + 1}/{len(job_cards)}] {title}\n{job_link}\n{about[:200]}..."
+                        )
                     except Exception as e:
-                        print(f"\n[{i + 1}/{len(job_cards)}] Skipping job {job_id}: {e}")
+                        print(
+                            f"\n[{i + 1}/{len(job_cards)}] Skipping job {job_id}: {e}"
+                        )
                         continue
 
                 # Check for Next button
@@ -138,7 +150,7 @@ def main():
             print(f"\nDone. Scraped {len(jobs)} jobs total.")
             while True:
                 time.sleep(1)
-        except (KeyboardInterrupt):
+        except KeyboardInterrupt:
             pass
 
 
