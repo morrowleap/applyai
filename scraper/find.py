@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Format: .venv/bin/python -m black find.py
 import os
 import threading
 import time
