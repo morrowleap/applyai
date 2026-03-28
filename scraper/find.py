@@ -15,8 +15,12 @@ LINKEDIN_JOBS_BASE_URL = "https://www.linkedin.com/jobs/search/"
 
 
 def fetch_keyword() -> str:
-    resp = requests.get(f"{BRIDGE_URL}/keyword", timeout=60)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(f"{BRIDGE_URL}/keyword", timeout=60)
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print(f"Bridge is not running. Start it first: cd bridge && ./run.sh")
+        raise SystemExit(1)
     data = resp.json()
     print(f"Keyword: {data['keyword']} — {data['rationale']}")
     return data["keyword"]
