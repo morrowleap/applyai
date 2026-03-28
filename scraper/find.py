@@ -86,7 +86,7 @@ def main():
                         page.wait_for_selector(
                             ".jobs-description__details [aria-busy='true']",
                             state="hidden",
-                            timeout=15000
+                            timeout=0
                         )
 
                         title_el = page.query_selector("h1.t-24.t-bold")
@@ -107,8 +107,8 @@ def main():
                     print(f"\nNo more pages. Total scraped: {len(jobs)} jobs.")
                     break
 
-                answer = input(f"\nGo to page {page_num + 1}? [y/n]: ").strip().lower()
-                if answer != "y":
+                answer = input(f"\nGo to page {page_num + 1}? [Y/n]: ").strip().lower()
+                if answer == "n":
                     print("Stopping.")
                     break
 
