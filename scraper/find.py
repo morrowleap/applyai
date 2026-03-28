@@ -71,14 +71,19 @@ def main():
                     """)
                     time.sleep(1)
 
-                # Collect all job IDs now in DOM (stable across re-renders)
-                job_ids = page.eval_on_selector_all(
+                # Collect job IDs and links now in DOM (stable across re-renders)
+                job_cards = page.eval_on_selector_all(
                     "li[data-occludable-job-id]",
-                    "els => els.map(el => el.getAttribute('data-occludable-job-id'))"
+                    """els => els.map(el => ({
+                        id: el.getAttribute('data-occludable-job-id'),
+                        link: (el.querySelector('a.job-card-container__link') || {}).href || null
+                    }))"""
                 )
-                print(f"\n--- Page {page_num} — {len(job_ids)} jobs ---")
+                print(f"\n--- Page {page_num} — {len(job_cards)} jobs ---")
 
-                for i, job_id in enumerate(job_ids):
+                for i, job in enumerate(job_cards):
+                    job_id = job["id"]
+                    job_link = job["link"] or f"https://www.linkedin.com/jobs/view/{job_id}/"
                     try:
                         # Scroll card into view — forces LinkedIn to re-render it into DOM
                         card = page.locator(f"li[data-occludable-job-id='{job_id}']")
@@ -98,7 +103,7 @@ def main():
                                 break
                             except Exception:
                                 elapsed = int(time.time() - wait_start)
-                                print(f"  Waiting for description... ({elapsed}s)", end="\r")
+                                print(f"  [{i + 1}/{len(job_cards)}] Loading {job_link} ({elapsed}s)", end="\r")
 
                         title_el = page.query_selector("h1.t-24.t-bold")
                         about_el = page.query_selector("#job-details")
@@ -106,10 +111,10 @@ def main():
                         title = title_el.inner_text().strip() if title_el else "N/A"
                         about = about_el.inner_text().strip() if about_el else "N/A"
 
-                        jobs.append({"title": title, "about": about})
-                        print(f"\n[{i + 1}/{len(job_ids)}] {title}\n{about[:200]}...")
+                        jobs.append({"title": title, "about": about, "link": job_link})
+                        print(f"\n[{i + 1}/{len(job_cards)}] {title}\n{job_link}\n{about[:200]}...")
                     except Exception as e:
-                        print(f"\n[{i + 1}/{len(job_ids)}] Skipping job {job_id}: {e}")
+                        print(f"\n[{i + 1}/{len(job_cards)}] Skipping job {job_id}: {e}")
                         continue
 
                 # Check for Next button
