@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import threading
 import time
 from urllib.parse import urlencode
 
@@ -103,7 +104,9 @@ def main():
                                 break
                             except Exception:
                                 elapsed = int(time.time() - wait_start)
-                                print(f"  [{i + 1}/{len(job_cards)}] Loading {job_link} ({elapsed}s)", end="\r")
+                                ans = input(f"\n  [{i + 1}/{len(job_cards)}] Loading {job_link} ({elapsed}s) — s + Enter to skip, Enter to keep waiting: ")
+                                if ans.strip().lower() == "s":
+                                    raise Exception("Skipped by user")
 
                         title_el = page.query_selector("h1.t-24.t-bold")
                         about_el = page.query_selector("#job-details")
