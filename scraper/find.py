@@ -82,8 +82,12 @@ def main():
                         time.sleep(0.3)
                         card.click()
 
-                        # Wait for the description content to fully render
-                        page.wait_for_selector("#job-details p", timeout=10000)
+                        # Wait for the loading skeleton to disappear (description fully rendered)
+                        page.wait_for_selector(
+                            ".jobs-description__details [aria-busy='true']",
+                            state="hidden",
+                            timeout=15000
+                        )
 
                         title_el = page.query_selector("h1.t-24.t-bold")
                         about_el = page.query_selector("#job-details")
@@ -101,6 +105,11 @@ def main():
                 next_btn = page.locator("button[aria-label='View next page']")
                 if next_btn.count() == 0 or not next_btn.is_enabled():
                     print(f"\nNo more pages. Total scraped: {len(jobs)} jobs.")
+                    break
+
+                answer = input(f"\nGo to page {page_num + 1}? [y/n]: ").strip().lower()
+                if answer != "y":
+                    print("Stopping.")
                     break
 
                 next_btn.click()
