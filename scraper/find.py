@@ -82,12 +82,19 @@ def main():
                         time.sleep(0.3)
                         card.click()
 
-                        # Wait for the loading skeleton to disappear (description fully rendered)
-                        page.wait_for_selector(
-                            ".jobs-description__details [aria-busy='true']",
-                            state="hidden",
-                            timeout=0
-                        )
+                        # Wait indefinitely for the loading skeleton to disappear, printing progress
+                        wait_start = time.time()
+                        while True:
+                            try:
+                                page.wait_for_selector(
+                                    ".jobs-description__details [aria-busy='true']",
+                                    state="hidden",
+                                    timeout=5000
+                                )
+                                break
+                            except Exception:
+                                elapsed = int(time.time() - wait_start)
+                                print(f"  Waiting for description... ({elapsed}s)", end="\r")
 
                         title_el = page.query_selector("h1.t-24.t-bold")
                         about_el = page.query_selector("#job-details")
