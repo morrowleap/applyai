@@ -11,7 +11,7 @@ def run_claude(prompt: str) -> str:
     """Call Claude CLI, return result text."""
     cmd = ["claude", "-p", "--output-format", "json"]
     logger.debug("Running Claude CLI")
-    result = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=120, cwd=BACKEND_DIR)
+    result = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=180, cwd=BACKEND_DIR)
     if result.returncode != 0 and not result.stdout:
         error = result.stderr or f"Claude CLI exited with code {result.returncode}"
         logger.error(f"Claude CLI failed: {error}")

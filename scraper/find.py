@@ -32,7 +32,7 @@ def score_job(title: str, about: str, link: str) -> dict | None:
         resp = requests.post(
             f"{BRIDGE_URL}/score",
             json={"title": title, "description": about, "link": link},
-            timeout=120,
+            timeout=180,
         )
         resp.raise_for_status()
         return resp.json()
