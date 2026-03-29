@@ -36,6 +36,7 @@ For each job I send you, you will score how well it matches my profile, identify
 
 Acknowledge that you have read these materials and give a brief summary of who I am and my key skills."""
 
+    state.resources = resources
     result, state.session_id = run_claude(init_prompt)
     logger.info(f"Session ready: {state.session_id}")
     logger.debug(f"Claude init response: {result[:300]}")

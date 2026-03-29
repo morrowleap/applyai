@@ -50,7 +50,11 @@ def score(body: ScoreRequest):
     if not state.session_id:
         raise HTTPException(503, "Session not initialized")
 
-    prompt = f"""Score this job posting for fit with my profile.
+    prompt = f"""Here are my job application materials:
+
+{state.resources}
+
+Score this job posting for fit with my profile.
 
 JOB TITLE: {body.title}
 DESCRIPTION:
@@ -66,7 +70,7 @@ Output ONLY the JSON object, no explanation."""
 
     try:
         logger.info(f"Scoring job: {body.title} | {body.link} (session {state.session_id})...")
-        response, _ = run_claude(prompt, session_id=state.session_id)
+        response, _ = run_claude(prompt)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
