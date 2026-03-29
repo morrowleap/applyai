@@ -7,4 +7,4 @@ router = APIRouter()
 
 @router.get("/health")
 def health():
-    return {"status": "ok", "session_id": state.session_id}
+    return {"status": "ok", "resources_loaded": state.resources is not None}

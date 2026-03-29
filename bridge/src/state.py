@@ -1,3 +1,2 @@
-# Shared session state — set by lifespan in server.py
-session_id: str | None = None
+# Shared state — set by lifespan in server.py
 resources: str | None = None

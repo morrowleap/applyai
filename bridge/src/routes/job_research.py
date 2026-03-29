@@ -13,27 +13,30 @@ router = APIRouter()
 
 @router.get("/keyword")
 def generate_keyword():
-    if not state.session_id:
-        raise HTTPException(503, "Session not initialized")
+    if not state.resources:
+        raise HTTPException(503, "Resources not loaded")
 
-    prompt = """Based on my resume (which you already have), generate ONE job search keyword or short phrase (2-5 words) that I should use on LinkedIn or job boards right now.
+    prompt = f"""Here are my job application materials:
+
+{state.resources}
+
+Based on my profile above, generate ONE job search keyword or short phrase (2-5 words) that I should use on LinkedIn or job boards right now.
 
 Requirements:
 - Must be for individual contributor SOFTWARE ENGINEER roles only — NOT manager, lead, director, or VP titles
 - Target the fintech and banking sector (payments, trading, core banking, lending — avoid the word "wealth management" as it surfaces non-engineering roles)
 - Must reflect current (2025-2026) hiring demand in financial services engineering
 - Must be specific enough to surface high-quality engineer matches
-- Must be different from any keyword you have already suggested in this session
 - Should combine my technical skills (Java, Spring Boot, microservices, Kafka, distributed systems) with a fintech domain
 
 Return ONLY a JSON object:
-{"keyword": "...", "rationale": "one sentence"}
+{{"keyword": "...", "rationale": "one sentence"}}
 
 Output ONLY the JSON object, no explanation."""
 
     try:
-        logger.info(f"Generating job search keyword (session {state.session_id})...")
-        response, _ = run_claude(prompt, session_id=state.session_id)
+        logger.info("Generating job search keyword...")
+        response = run_claude(prompt)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
@@ -47,8 +50,8 @@ Output ONLY the JSON object, no explanation."""
 
 @router.post("/score")
 def score(body: ScoreRequest):
-    if not state.session_id:
-        raise HTTPException(503, "Session not initialized")
+    if not state.resources:
+        raise HTTPException(503, "Resources not loaded")
 
     prompt = f"""Here are my job application materials:
 
@@ -69,8 +72,8 @@ Return ONLY a JSON object with these fields:
 Output ONLY the JSON object, no explanation."""
 
     try:
-        logger.info(f"Scoring job: {body.title} | {body.link} (session {state.session_id})...")
-        response, _ = run_claude(prompt)
+        logger.info(f"Scoring job: {body.title} | {body.link}")
+        response = run_claude(prompt)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
