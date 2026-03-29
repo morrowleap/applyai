@@ -53,9 +53,8 @@ def score(body: ScoreRequest):
     prompt = f"""Score this job posting for fit with my profile.
 
 JOB TITLE: {body.title}
-COMPANY: {body.company}
 DESCRIPTION:
-{body.description[:3000]}
+{body.description}
 
 Return ONLY a JSON object with these fields:
 - score: integer 1-10 (10 = perfect fit)
@@ -66,7 +65,7 @@ Return ONLY a JSON object with these fields:
 Output ONLY the JSON object, no explanation."""
 
     try:
-        logger.info(f"Scoring job: {body.title} at {body.company} (session {state.session_id})...")
+        logger.info(f"Scoring job: {body.title} | {body.link} (session {state.session_id})...")
         response, _ = run_claude(prompt, session_id=state.session_id)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
