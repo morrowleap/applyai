@@ -35,7 +35,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"title\": \"Senior Java Backend Engineer\",\n  \"company\": \"Revolut\",\n  \"description\": \"We are looking for a Senior Java Backend Engineer to join our Payments team. You will design and build high-throughput microservices using Java, Spring Boot, and Kafka. Experience with distributed systems, PostgreSQL, and AWS is required.\"\n}",
+          "raw": "{\n  \"title\": \"Senior Java Backend Engineer\",\n  \"description\": \"We are looking for a Senior Java Backend Engineer to join our Payments team. You will design and build high-throughput microservices using Java, Spring Boot, and Kafka. Experience with distributed systems, PostgreSQL, and AWS is required.\",\n  \"link\": \"https://www.linkedin.com/jobs/view/1234567890/\"\n}",
           "options": {
             "raw": {
               "language": "json"
