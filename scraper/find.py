@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Format: .venv/bin/python -m black find.py
 import os
 import threading
 import time
@@ -125,7 +124,7 @@ def main():
 
                         jobs.append({"title": title, "about": about, "link": job_link})
                         print(
-                            f"\n[{i + 1}/{len(job_cards)}] {title}\n{job_link}\n"
+                            f"\n[{i + 1}/{len(job_cards)}] \033[1;32m{title}\033[0m\n\033[36m{job_link}\033[0m\n{about[:200]}..."
                         )
                     except Exception as e:
                         print(
