@@ -127,9 +127,7 @@ def main():
                             f"\n[{i + 1}/{len(job_cards)}] \033[1;32m{title}\033[0m\n\033[36m{job_link}\033[0m\n{about[:200]}..."
                         )
                     except Exception as e:
-                        print(
-                            f"\n[{i + 1}/{len(job_cards)}] Skipping {job_link}: {e}"
-                        )
+                        print(f"\n[{i + 1}/{len(job_cards)}] Skipping {job_link}: {e}")
                         continue
 
                 # Check for Next button
