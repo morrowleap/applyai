@@ -125,11 +125,11 @@ def main():
 
                         jobs.append({"title": title, "about": about, "link": job_link})
                         print(
-                            f"\n[{i + 1}/{len(job_cards)}] {title}\n{job_link}\n{about[:200]}..."
+                            f"\n[{i + 1}/{len(job_cards)}] {title}\n{job_link}\n"
                         )
                     except Exception as e:
                         print(
-                            f"\n[{i + 1}/{len(job_cards)}] Skipping job {job_id}: {e}"
+                            f"\n[{i + 1}/{len(job_cards)}] Skipping {job_link}: {e}"
                         )
                         continue
 
