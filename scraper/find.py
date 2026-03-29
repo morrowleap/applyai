@@ -27,6 +27,20 @@ def fetch_keyword() -> str:
     return data["keyword"]
 
 
+def score_job(title: str, about: str, link: str) -> dict | None:
+    try:
+        resp = requests.post(
+            f"{BRIDGE_URL}/score",
+            json={"title": title, "description": about, "link": link},
+            timeout=120,
+        )
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        print(f"  [score failed: {e}]")
+        return None
+
+
 def main():
     email = os.environ["LINKEDIN_EMAIL"]
     password = os.environ["LINKEDIN_PASSWORD"]
@@ -122,9 +136,17 @@ def main():
                         title = title_el.inner_text().strip() if title_el else "N/A"
                         about = about_el.inner_text().strip() if about_el else "N/A"
 
-                        jobs.append({"title": title, "about": about, "link": job_link})
+                        score = score_job(title, about, job_link)
+                        score_line = ""
+                        if score:
+                            s = score.get("score", "?")
+                            reason = score.get("reason", "")
+                            color = "32" if s >= 7 else "33" if s >= 4 else "31"
+                            score_line = f"\n\033[1;{color}mScore: {s}/10\033[0m — {reason}"
+
+                        jobs.append({"title": title, "about": about, "link": job_link, "score": score})
                         print(
-                            f"\n[{i + 1}/{len(job_cards)}] \033[1;32m{title}\033[0m\n\033[36m{job_link}\033[0m\n{about[:200]}..."
+                            f"\n[{i + 1}/{len(job_cards)}] \033[1;32m{title}\033[0m\n\033[36m{job_link}\033[0m{score_line}"
                         )
                     except Exception as e:
                         print(f"\n[{i + 1}/{len(job_cards)}] Skipping {job_link}: {e}")
