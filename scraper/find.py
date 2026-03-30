@@ -38,7 +38,7 @@ def score_job(title: str, about: str, link: str) -> dict | None:
         return resp.json()
     except Exception as e:
         print(f"  [score failed: {e}]")
-        return None
+        raise e
 
 
 def main():
@@ -144,7 +144,7 @@ def main():
                             color = "32" if s >= 7 else "33" if s >= 4 else "31"
                             score_line = f"\n\033[1;{color}mScore: {s}/10\033[0m — {reason}"
 
-                        jobs.append({"title": title, "about": about, "link": job_link, "score": score})
+                        # jobs.append({"title": title, "about": about, "link": job_link, "score": score})
                         print(
                             f"\n[{i + 1}/{len(job_cards)}] \033[1;32m{title}\033[0m\n\033[36m{job_link}\033[0m{score_line}"
                         )
