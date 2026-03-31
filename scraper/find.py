@@ -13,6 +13,7 @@ load_dotenv()
 BRIDGE_URL = "http://localhost:8080"
 LINKEDIN_LOGIN_URL = "https://www.linkedin.com/login"
 LINKEDIN_JOBS_BASE_URL = "https://www.linkedin.com/jobs/search/"
+LINKEDIN_RECOMMENDED_URL = "https://www.linkedin.com/jobs/collections/recommended/"
 
 
 def fetch_keyword() -> str:
@@ -45,9 +46,13 @@ def main():
     email = os.environ["LINKEDIN_EMAIL"]
     password = os.environ["LINKEDIN_PASSWORD"]
 
-    # Get keyword from bridge before opening browser
-    keyword = fetch_keyword()
-    jobs_url = LINKEDIN_JOBS_BASE_URL + "?" + urlencode({"keywords": keyword})
+    mode = input("Mode — [1] Keyword search  [2] Recommended jobs: ").strip()
+    if mode == "2":
+        jobs_url = LINKEDIN_RECOMMENDED_URL
+        print("Using LinkedIn recommendations.")
+    else:
+        keyword = fetch_keyword()
+        jobs_url = LINKEDIN_JOBS_BASE_URL + "?" + urlencode({"keywords": keyword})
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
