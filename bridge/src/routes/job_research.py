@@ -3,7 +3,7 @@ import re
 
 from fastapi import APIRouter, HTTPException
 
-from src.claude import run_claude
+from src.ollama_llm import run_ollama
 from src.logger import logger
 from src.models import ScoreRequest
 from src import state
@@ -36,7 +36,7 @@ Output ONLY the JSON object, no explanation."""
 
     try:
         logger.info("Generating job search keyword...")
-        response = run_claude(prompt)
+        response = run_ollama(prompt)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
@@ -73,7 +73,7 @@ Output ONLY the JSON object, no explanation."""
 
     try:
         logger.info(f"Scoring job: {body.title} | {body.link}")
-        response = run_claude(prompt)
+        response = run_ollama(prompt)
         logger.debug(f"Claude raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:

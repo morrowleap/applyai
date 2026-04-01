@@ -1,20 +1,20 @@
-import json
-import subprocess
-from pathlib import Path
+# import json
+# import subprocess
+# from pathlib import Path
 
-from src.logger import logger
+# from src.logger import logger
 
-BACKEND_DIR = Path(__file__).resolve().parent.parent
+# BACKEND_DIR = Path(__file__).resolve().parent.parent
 
 
-def run_claude(prompt: str) -> str:
-    """Call Claude CLI, return result text."""
-    cmd = ["claude", "-p", "--output-format", "json"]
-    logger.debug("Running Claude CLI")
-    result = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=180, cwd=BACKEND_DIR)
-    if result.returncode != 0 and not result.stdout:
-        error = result.stderr or f"Claude CLI exited with code {result.returncode}"
-        logger.error(f"Claude CLI failed: {error}")
-        raise RuntimeError(error)
-    data = json.loads(result.stdout)
-    return data["result"]
+# def run_claude(prompt: str) -> str:
+#     """Call Claude CLI, return result text."""
+#     cmd = ["claude", "-p", "--output-format", "json"]
+#     logger.debug("Running Claude CLI")
+#     result = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=180, cwd=BACKEND_DIR)
+#     if result.returncode != 0 and not result.stdout:
+#         error = result.stderr or f"Claude CLI exited with code {result.returncode}"
+#         logger.error(f"Claude CLI failed: {error}")
+#         raise RuntimeError(error)
+#     data = json.loads(result.stdout)
+#     return data["result"]
