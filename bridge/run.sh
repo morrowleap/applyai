@@ -17,8 +17,10 @@ if [ -z "$OLLAMA_MODEL" ]; then
   exit 1
 fi
 
-echo "Pulling Ollama model: $OLLAMA_MODEL"
-ollama pull "$OLLAMA_MODEL"
+if [[ "$OLLAMA_MODEL" != *":cloud" ]]; then
+  echo "Pulling Ollama model: $OLLAMA_MODEL"
+  ollama pull "$OLLAMA_MODEL"
+fi
 
 
 # Add --reload for hot reloading during development
