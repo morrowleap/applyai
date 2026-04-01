@@ -9,10 +9,12 @@ OLLAMA_MODEL = os.environ["OLLAMA_MODEL"]
 
 def run_ollama(prompt: str) -> str:
     logger.debug(f"Running Ollama model: {OLLAMA_MODEL}")
+    logger.debug(f"Prompt:\n{prompt}")
     response = ollama.chat(
         model=OLLAMA_MODEL,
         messages=[{"role": "user", "content": prompt}],
         think=False,
     )
-    logger.debug(f"Ollama responded")
-    return response["message"]["content"]
+    content = response["message"]["content"]
+    logger.debug(f"Response:\n{content}")
+    return content
