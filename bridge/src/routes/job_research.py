@@ -37,10 +37,10 @@ Output ONLY the JSON object, no explanation."""
     try:
         logger.info("Generating job search keyword...")
         response = run_ollama(prompt)
-        logger.debug(f"Claude raw response: {response}")
+        logger.debug(f"LLM raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
-            raise ValueError("No JSON object in response: " + response[:200])
+            raise ValueError("No JSON object in response: " + response)
         result = json.loads(match.group())
         return result
     except Exception as e:
@@ -74,10 +74,10 @@ Output ONLY the JSON object, no explanation."""
     try:
         logger.info(f"Scoring job: {body.title} | {body.link}")
         response = run_ollama(prompt)
-        logger.debug(f"Claude raw response: {response}")
+        logger.debug(f"LLM raw response: {response}")
         match = re.search(r"\{[\s\S]*\}", response)
         if not match:
-            raise ValueError("No JSON object in response: " + response[:200])
+            raise ValueError("No JSON object in response: " + response)
         result = json.loads(match.group())
         return result
     except Exception as e:
