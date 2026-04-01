@@ -4,14 +4,13 @@ import ollama
 
 from src.logger import logger
 
-OLLAMA_MODEL = os.environ["OLLAMA_MODEL"]
-
 
 def run_ollama(prompt: str) -> str:
-    logger.debug(f"Running Ollama model: {OLLAMA_MODEL}")
+    model = os.environ["OLLAMA_MODEL"]
+    logger.debug(f"Running Ollama model: {model}")
     logger.debug(f"Prompt:\n{prompt}")
     response = ollama.chat(
-        model=OLLAMA_MODEL,
+        model=model,
         messages=[{"role": "user", "content": prompt}],
         think=False,
     )
