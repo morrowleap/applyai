@@ -12,5 +12,7 @@ def run_ollama(prompt: str) -> str:
     response = ollama.chat(
         model=OLLAMA_MODEL,
         messages=[{"role": "user", "content": prompt}],
+        think=False,
     )
+    logger.debug(f"Ollama responded")
     return response["message"]["content"]
