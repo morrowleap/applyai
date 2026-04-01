@@ -7,12 +7,12 @@ from pathlib import Path
 #   DEBUG < INFO < WARNING < ERROR
 #
 # Usage:
-#   LOG_LEVEL=DEBUG ./run.sh    → default, shows everything
-#   LOG_LEVEL=INFO ./run.sh     → hides DEBUG
+#   LOG_LEVEL=DEBUG ./run.sh    → shows everything
+#   LOG_LEVEL=INFO ./run.sh     → default, hides DEBUG
 #   LOG_LEVEL=WARNING ./run.sh  → hides DEBUG and INFO
 #   LOG_LEVEL=ERROR ./run.sh    → errors only
 
-LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG").upper()
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
 LOGS_DIR = Path(__file__).resolve().parent.parent / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
