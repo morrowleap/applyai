@@ -3,7 +3,7 @@ import re
 
 from fastapi import APIRouter, HTTPException
 
-from src.ollama_llm import run_ollama
+from src.llm.ollama import run_ollama
 from src.logger import logger
 from src.models import ScoreRequest
 from src import state
