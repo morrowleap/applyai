@@ -1,3 +1,4 @@
 fastapi
 uvicorn[standard]
 ollama
+python-dotenv
