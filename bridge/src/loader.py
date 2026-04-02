@@ -1,14 +1,14 @@
+import os
 from pathlib import Path
 
 from src.logger import logger
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-RESOURCES_DIR = BASE_DIR / "resources"
+RESOURCES_DIR = Path(os.environ["RESOURCES_DIR"]).expanduser()
 SKIP_EXTENSIONS = {".pdf"}
 
 
 def load_resources() -> str:
-    """Read all text-readable files from resources/ and return combined content."""
+    """Read all text-readable files from RESOURCES_DIR and return combined content."""
     parts = []
     for path in sorted(RESOURCES_DIR.iterdir()):
         if path.suffix.lower() in SKIP_EXTENSIONS or not path.is_file():
