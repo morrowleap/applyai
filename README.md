@@ -5,6 +5,6 @@ A job finder app: to find relevant jobs, matching my skills up-to 50 percent
 A job-suggestion service: which adjust my resume for the particular job i am applying
 A job-applier app: to apply the jobs using open source browse-use, make prompt templates for different types of websites.
 
-TODO: Make it work with local AI, and possibly 
+TODO: Make scrapper work with local AI, and possibly 
 If we want to make it work with Claude,
 Need to reduce the size of the payload going to Claude as it is exhausting the limits currently.
