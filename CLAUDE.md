@@ -1,1 +1,1 @@
-Completetly Ignore archive folder, README.md, TODO.md
+Completetly Ignore: archive folder, README.md, TODO.md
